@@ -1,149 +1,94 @@
+    /**
+     * Gestion d'un carnet d'adresses
+     * @file Gère la liste des contacts, l'ajout, la modification et la suppression de contacts
+     */
 
-    /*
-    * Récupération des elements HTML
-    * */
-    const allScreens = document.querySelector("#all_screens");
-    const addButton = document.querySelector("#add_button");
-    const backButton = document.querySelectorAll(".back_button");
-    const validateButton = document.querySelector("#validate_button");
-    const deleteButton = document.querySelector("#delete_button");
-    const editButton = document.querySelector("#edit_button");
-    const contactsList = document.querySelector("#contacts_list");
-    const label = document.querySelector("#title");
-    const inputFields = document.querySelectorAll("input");
-
-    let contacts = [];
-    let mode = "add";
-    let currentContact = null;
-    let contactId = 0;
-
-    //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-    //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-Event Listeners=-=-=-=-=-=-=-=-=-=-=-=
-    //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-    addButton.addEventListener("click", () =>
+    // Regrouper les sélecteurs dans un seul objet pour améliorer la lisibilité et la gestion des éléments HTML
+    const elements = 
     {
-        label.textContent = "Ajouter un contact";
+        label: document.querySelector("#title"),
+        inputFields: document.querySelectorAll("input"),
+        addButton: document.querySelector("#add_button"),
+        editButton: document.querySelector("#edit_button"),
+        allScreens: document.querySelector("#all_screens"),
+        backButton: document.querySelectorAll(".back_button"),
+        deleteButton: document.querySelector("#delete_button"),
+        contactsList: document.querySelector("#contacts_list"),
+        validateButton: document.querySelector("#validate_button")
+    };
+
+    let mode = "add";
+    let contactId = 0;
+    let contacts = [];
+    let currentContact = null;
+
+    // Ajout des gestionnaires d'événements
+    elements.addButton.addEventListener("click", onAddButtonClick);
+    elements.deleteButton.addEventListener("click", deleteContact);
+    elements.editButton.addEventListener("click", onEditButtonClick);
+    elements.contactsList.addEventListener("click", onContactsListClick);
+    elements.validateButton.addEventListener("click", onValidateButtonClick);
+    elements.backButton.forEach(button => button.addEventListener("click", onBackButtonClick));
+
+
+    function onAddButtonClick() {
+        elements.label.textContent = "Ajouter un contact";
         showScreen(1);
         document.querySelector("#delete_button").classList.remove("visible");
-    });
-
-    backButton.forEach(button =>
-    {
-        button.addEventListener("click", () =>
-        {
-            if (mode === "edit")
-            {
-                mode = "add";
-                document.querySelector("#validate_button").textContent = "Ajouter";
-                document.querySelector("#delete_button").classList.remove("visible");
-            }
-            clearInputFields();
-            showScreen(2);
-        });
-    });
-
-    validateButton.addEventListener("click", () =>
-    {
-        if (isValidInput())
-        {
-            if (mode === "add")
-            {
+    };
+    
+    function onBackButtonClick() {
+        if (mode === "edit") {
+            mode = "add";
+            document.querySelector("#validate_button").textContent = "Ajouter";
+            document.querySelector("#delete_button").classList.remove("visible");
+        }
+        clearInputFields();
+        showScreen(2);
+    };
+    
+    function onValidateButtonClick() {
+        if (isValidInput()) {
+            if (mode === "add") {
                 const newContact = createContact();
                 contacts.push(newContact);
-                updateContactListSortSurname();
-            }
-            else if (mode === "edit")
-            {
+                updateContactList();
+            } else if (mode === "edit") {
                 updateCurrentContact();
-                updateContactListSortSurname();
+                updateContactList();
             }
             showScreen(2);
             clearInputFields();
         }
-    });
-
-    deleteButton.addEventListener("click", deleteContact);
-
-    contactsList.addEventListener("click", (event) =>
-    {
-        if (event.target.tagName === "LI")
-        {
+    };
+    
+    function onContactsListClick(event) {
+        if (event.target.tagName === "LI") {
             currentContact = contacts.find(contact => contact.id === parseInt(event.target.dataset.id));
             displayContact(currentContact);
             showScreen(3);
         }
-    });
-
-    editButton.addEventListener("click", () =>
-    {
+    };
+    
+    function onEditButtonClick() {
         fillForm(currentContact);
         mode = "edit";
         document.querySelector("#validate_button").textContent = "Enregistrer";
         document.querySelector("#delete_button").classList.add("visible");
-        label.textContent = "Modifier un contact";
+        elements.label.textContent = "Modifier un contact";
         showScreen(1);
-    });
-
-    //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-    //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-Fonctions=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-    /**
-     * Efface les valeurs des champs de saisie.
-     */
-    function clearInputFields()
-    {
-        inputFields.forEach(input =>
-        {
-            input.value = "";
-
-        });
-    }
-
-    /**
-     * Remplit le formulaire avec les informations du contact.
-     * @param {Object} contact - Le contact dont les informations doivent être affichées.
-     */
-    function fillForm(contact)
-    {
-        document.querySelector("#name_field").value = contact.prenom;
-        document.querySelector("#surname_field").value = contact.nom;
-        document.querySelector("#phone_field").value = contact.telephone;
-        document.querySelector("#email_field").value = contact.email;
-    }
-
-    /**
-     * Met à jour les informations du contact actuellement sélectionné.
-     */
-    function updateCurrentContact()
-    {
-        currentContact.nom = document.querySelector("#surname_field").value;
-        currentContact.prenom = document.querySelector("#name_field").value;
-        currentContact.telephone = document.querySelector("#phone_field").value;
-        currentContact.email = document.querySelector("#email_field").value;
-    }
-
-    /**
-     * Affiche les informations d'un contact à l'écran.
-     * @param {Object} contact - Le contact dont les informations doivent être affichées.
-     */
-    function displayContact(contact)
-    {
-        document.querySelector("#details_name").textContent = contact.prenom + ' ' + contact.nom;
-        document.querySelector("#details_phone").textContent = contact.telephone;
-        document.querySelector("#details_email").textContent = contact.email;
-    }
-
+    };/* 
+    
+    /* Fonctions */
 
     /**
      * Affiche l'écran spécifié.
      * @param {number} n - L'indice de l'écran à afficher: 1, 2, ou 3.
      */
-    function showScreen(n)
+    function showScreen(n) 
     {
-        allScreens.style.left = `${(1 - n) * 100}%`;
+        elements.allScreens.style.left = `${(1 - n) * 100}%`;
     }
-
     /**
      * Vérifie si les informations saisies sont valides.
      * @returns {boolean} - Retourne true si les informations sont valides, sous les formats regEx demandés et non null, sinon false.
@@ -183,37 +128,32 @@
     }
 
     /**
-     * Supprime le contact actuellement sélectionné.
+     * Affiche les informations d'un contact à l'écran.
+     * @param {Object} contact - Le contact dont les informations doivent être affichées.
      */
-    function deleteContact()
+    function displayContact(contact)
     {
-        if (confirm("Êtes-vous sûr de vouloir supprimer ce contact ?"))
-        {
-            contacts = contacts.filter(c => c !== currentContact);
-            updateContactListSortSurname();
-            showScreen(2);
-        }
+        document.querySelector("#details_name").textContent = contact.prenom + ' ' + contact.nom;
+        document.querySelector("#details_phone").textContent = contact.telephone;
+        document.querySelector("#details_email").textContent = contact.email;
     }
-
     /**
-     * Supprime un contact de la liste.
-     * @param {Object} contact - Le contact à supprimer de la liste.
+     * Efface les valeurs des champs de saisie.
      */
-    function deleteContactFromList(contact) 
+    function clearInputFields()
     {
-        if (confirm("Êtes-vous sûr de vouloir supprimer ce contact ?")) 
+        elements.inputFields.forEach(input =>
         {
-            contacts = contacts.filter(c => c.id !== contact.id);
-            updateContactListSortSurname();
-        }
-    }
+            input.value = "";
 
+        });
+    }
     /**
-     * Met à jour la liste des contacts en la triant par nom de famille.
+     * Met à jour la liste des contacts.
      */
-    function updateContactListSortSurname() 
+    function updateContactList()
     {
-        contactsList.innerHTML = "";
+        elements.contactsList.innerHTML = "";
 
         // Tri des contacts par prénom
         contacts.sort((a, b) =>
@@ -258,6 +198,56 @@
             li.dataset.phone = contact.telephone;
             li.dataset.email = contact.email;
 
-            contactsList.appendChild(li);
+            elements.contactsList.appendChild(li);
         });
     }
+
+    /**
+     * Remplit le formulaire avec les informations du contact.
+     * @param {Object} contact - Le contact dont les informations doivent être affichées.
+     */
+    function fillForm(contact)
+    {
+        document.querySelector("#name_field").value = contact.prenom;
+        document.querySelector("#surname_field").value = contact.nom;
+        document.querySelector("#phone_field").value = contact.telephone;
+        document.querySelector("#email_field").value = contact.email;
+    }
+
+    /**
+     * Met à jour les informations du contact actuellement sélectionné.
+     */
+    function updateCurrentContact()
+    {
+        currentContact.nom = document.querySelector("#surname_field").value;
+        currentContact.prenom = document.querySelector("#name_field").value;
+        currentContact.telephone = document.querySelector("#phone_field").value;
+        currentContact.email = document.querySelector("#email_field").value;
+    }
+
+    /**
+     * Supprime le contact actuellement sélectionné.
+     */
+    function deleteContact()
+    {
+        if (confirm("Êtes-vous sûr de vouloir supprimer ce contact ?"))
+        {
+            contacts = contacts.filter(c => c !== currentContact);
+            updateContactList();
+            showScreen(2);
+        }
+    }
+
+    /**
+     * Supprime un contact de la liste.
+     * @param {Object} contact - Le contact à supprimer de la liste.
+     */
+    function deleteContactFromList(contact) 
+    {
+        if (confirm("Êtes-vous sûr de vouloir supprimer ce contact ?")) 
+        {
+            contacts = contacts.filter(c => c.id !== contact.id);
+            updateContactList();
+        }
+    }
+

@@ -22,7 +22,7 @@ let contactId = 0;
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 searchInput.addEventListener("input", () =>
 {
-    updateContactListSortSurname(true);
+    updateContactList(true);
 });
 
 addButton.addEventListener("click", () =>
@@ -55,15 +55,15 @@ validateButton.addEventListener("click", () =>
         {
             const newContact = createContact();
             contacts.push(newContact);
-            updateContactListSortSurname();
+            updateContactList();
         }
         else if (mode === "edit")
         {
             updateCurrentContact();
-            updateContactListSortSurname();
+            updateContactList();
         }
         saveContacts();
-        updateContactListSortSurname();
+        updateContactList();
         showScreen(2);
         clearInputFields();
     }
@@ -203,7 +203,7 @@ function deleteContact()
     {
         contacts = contacts.filter(c => c !== currentContact);
         saveContacts();
-        updateContactListSortSurname();
+        updateContactList();
         showScreen(2);
     }
 }
@@ -218,14 +218,14 @@ function deleteContactFromList(contact)
     {
         contacts = contacts.filter(c => c.id !== contact.id);
         saveContacts();
-        updateContactListSortSurname();
+        updateContactList();
     }
 }
 
 /**
  * Met à jour la liste des contacts en la triant par nom de famille.
  */
-function updateContactListSortSurname(search = false, filteredContacts = null)
+function updateContactList(search = false, filteredContacts = null)
 {
 
     if (search) {
@@ -293,7 +293,7 @@ function searchContacts()
             contact.email.toLowerCase().includes(searchValue))
     );
 
-    updateContactListSortSurname(false, filteredContacts);
+    updateContactList(false, filteredContacts);
 }
 
 function saveContacts()
@@ -311,5 +311,5 @@ function loadContacts()
 
 document.addEventListener('DOMContentLoaded', () => {
     loadContacts();
-    updateContactListSortSurname();
+    updateContactList();
 });

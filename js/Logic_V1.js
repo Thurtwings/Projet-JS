@@ -5,12 +5,15 @@ const validateButton = document.querySelector("#validate_button");
 const contactsList = document.querySelector("#contacts_list");
 const inputFields = document.querySelectorAll("input");
 
+
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-Fonctions=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-Event Listeners=-=-=-=-=-=-=-=-=-=-=-=
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-// Affiche l'écran d'ajout de contact
+// * Déclencher des actions au clic sur les différents boutons.
+
 addButton.addEventListener("click", () =>
 {
+    // Affiche l'écran d'ajout de contact
     showScreen(1);
 });
 
@@ -19,6 +22,7 @@ backButton.forEach(button =>
 {
     button.addEventListener("click", () =>
     {
+        // Affiche l'écran d'ajout de la liste
         showScreen(2);
         clearInputFields();
     });
@@ -27,10 +31,12 @@ backButton.forEach(button =>
 // Valide les données saisies et ajoute un nouveau contact à la liste
 validateButton.addEventListener("click", () =>
 {
-    if (isValidInput()) {
+    if (isValidInput())
+    {
         const newContact = createContact();
         contactsList.appendChild(newContact);
         updateDetails(newContact);
+        // Affiche l'écran des détails du contact sélectionné
         showScreen(3);
         clearInputFields();
     }
@@ -45,29 +51,32 @@ contactsList.addEventListener("click", (event) =>
     }
 });
 
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-Fonctions=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-function showScreen(n) {
-    allScreens.style.left = `${(1 - n) * 100}%`;
-}
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+    // //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-Fonctions=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-function isValidInput() {
-    const name = document.querySelector("#name_field").value;
-    const surname = document.querySelector("#surname_field").value;
-    const phone = document.querySelector("#phone_field").value;
-    const email = document.querySelector("#email_field").value;
-
-    if (!name || !surname || !phone || !email) {
-        return false;
+    // * Afficher les différents écrans de l'application.
+    function showScreen(n) {
+        allScreens.style.left = `${(1 - n) * 100}%`;
     }
+    // * Vérifier que les données saisies dans les champs lors de l'ajout d'un contact sont cohérentes.
+    function isValidInput()
+    {
+        const name = document.querySelector("#name_field").value;
+        const surname = document.querySelector("#surname_field").value;
+        const phone = document.querySelector("#phone_field").value;
+        const email = document.querySelector("#email_field").value;
 
-    const phoneRegex = /^(?:(?:\+|00)33[\s.-]{0,3}(?:\(0\)[\s.-]{0,3})?|0)[1-9](?:(?:[\s.-]?\d{2}){4}|\d{2}(?:[\s.-]?\d{3}){2})$/;
-    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+        if (!name || !surname || !phone || !email) {
+            return false;
+        }
 
-    return phone.match(phoneRegex) && email.match(emailRegex);
-}
+        const phoneRegex = /^(?:(?:\+|00)33[\s.-]{0,3}(?:\(0\)[\s.-]{0,3})?|0)[1-9](?:(?:[\s.-]?\d{2}){4}|\d{2}(?:[\s.-]?\d{3}){2})$/;
+        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
+        return phone.match(phoneRegex) && email.match(emailRegex);
+    }
+    // * Créer un nouvel élément dans la liste de contacts.
     function createContact()
     {
         const li = document.createElement("li");
@@ -79,6 +88,7 @@ function isValidInput() {
         return li;
     }
 
+// * Mettre à jour les contenus du troisième écran.
     function updateDetails(contact)
     {
         document.querySelector("#details_name").textContent = contact.dataset.name + ' ' + contact.dataset.surname;
@@ -86,6 +96,7 @@ function isValidInput() {
         document.querySelector("#details_email").textContent = contact.dataset.email;
     }
 
+// * Vide les inputs fields apres l'ajout d'un contact
     function clearInputFields()
     {
         inputFields.forEach(input =>

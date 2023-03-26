@@ -22,7 +22,7 @@ let contactId = 0;
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-Event Listeners=-=-=-=-=-=-=-=-=-=-=-=
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 searchInput.addEventListener("input", () => {
-    updateContactListSortSurname(true);
+    updateContactList(true);
 });
 
 addButton.addEventListener("click", () =>
@@ -55,12 +55,12 @@ validateButton.addEventListener("click", () =>
         {
             const newContact = createContact();
             contacts.push(newContact);
-            updateContactListSortSurname();
+            updateContactList();
         }
         else if (mode === "edit")
         {
             updateCurrentContact();
-            updateContactListSortSurname();
+            updateContactList();
         }
         showScreen(2);
         clearInputFields();
@@ -192,7 +192,7 @@ function deleteContact()
     if (confirm("Êtes-vous sûr de vouloir supprimer ce contact ?"))
     {
         contacts = contacts.filter(c => c !== currentContact);
-        updateContactListSortSurname();
+        updateContactList();
         showScreen(2);
     }
 }
@@ -206,14 +206,14 @@ function deleteContactFromList(contact)
     if (confirm("Êtes-vous sûr de vouloir supprimer ce contact ?"))
     {
         contacts = contacts.filter(c => c.id !== contact.id);
-        updateContactListSortSurname();
+        updateContactList();
     }
 }
 
 /**
  * Met à jour la liste des contacts en la triant par nom de famille.
  */
-function updateContactListSortSurname(search = false, filteredContacts = null)
+function updateContactList(search = false, filteredContacts = null)
 {
 
     if (search) {
@@ -281,5 +281,5 @@ function searchContacts()
             contact.email.toLowerCase().includes(searchValue))
         );
 
-    updateContactListSortSurname(false, filteredContacts);
+    updateContactList(false, filteredContacts);
 }
