@@ -1,0 +1,126 @@
+body {
+    margin:0;
+    font-family:sans-serif;
+    background-color:beige;
+}
+
+#all_screens {
+    position:fixed;
+    left:-100%;
+    width:300%;
+    height:100vh;
+    display:flex;
+    transition: left 0.5s;
+}
+
+.screen {
+    width:33.333%;
+    height:100%;
+    overflow:auto;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+.screen_contents {
+    width:420px;
+    position:relative;
+    background-color:rgba(255,255,255,0.75);
+    padding:10px; border:1px solid black;
+    box-shadow:0 2px 6px grey;
+    border-radius:5px;
+}
+
+.back_button + h2 {
+    margin-top:40px;
+}
+
+form {
+    width:100%;
+}
+
+ul {
+    list-style-type: none;
+    padding:0;
+    border-top:1px solid grey;
+}
+
+li {
+    min-height:30px;
+    line-height:30px;
+    border-bottom:1px solid grey;
+    padding:5px;
+    cursor:pointer;
+}
+
+li:hover {
+    background:lightgray;
+}
+
+#add_button , #edit_button {
+    margin-top:10px;
+}
+
+input {
+    width:100%;
+    box-sizing:border-box;
+    margin-top:20px;
+}
+
+button {
+    margin-top:20px;
+    cursor:pointer;
+}
+
+button, input {
+    height:30px;
+}
+
+.back_button {
+    position:absolute;
+    top:-10px; right:10px;
+    width:30px;
+}
+
+#validate_button {
+    width:100%;
+}
+
+#delete_button {
+    font-size:12px; color:red;
+    height:20px;
+    display:none;
+}
+
+#delete_button.visible {
+    display:inline;
+}
+
+.delete-button 
+{
+    background-color: red;
+    border-radius: 50%;
+    height: 20px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 8px;
+    
+}
+#pagination
+{
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+#pagination button
+{
+    margin: 0 0.5rem;
+}
+
+#pagination .current
+{
+    font-weight: bold;
+}

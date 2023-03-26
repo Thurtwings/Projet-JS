@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Liste de contacts</title>
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div id="all_screens">
+    <!-- Pour afficher les différents écrans, c'est cet élément qu'il faudra faire bouger, horizontalement -->
+
+    <!-- Écran ajout de contact -->
+    <div class="screen" id="add_screen">
+
+        <div class="screen_contents">
+
+            <button class="back_button">&times;</button>
+
+            <h2 id="title">Ajouter un contact</h2>
+
+
+            <form novalidate><!-- Des données seront à récupérer dans les champs ci-dessous -->
+
+                <input id="name_field" placeholder="Nom" type="text">
+
+                <input id="surname_field" placeholder="Prénom" type="text">
+
+                <input id="phone_field" placeholder="Téléphone" type="text">
+
+                <input id="email_field" placeholder="E-mail" type="email">
+
+                <button id="validate_button" type="button">Ajouter</button>
+
+                <!-- NOUVEAU -->
+                <button id="delete_button" type="button">Supprimer ce contact</button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- Écran liste de contacts -->
+    <div class="screen" id="list_screen">
+
+        <div class="screen_contents">
+
+            <h2>Contacts</h2>
+            
+            <input type="text" id="search_input" placeholder="Rechercher un contact...">
+            <br>
+            <br>
+            <div id="sorting">
+                <label for="sort_selector">Trier par :</label>
+                <select id="sort_selector">
+                    <option value="prenom">Prénom</option>
+                    <option value="nom">Nom</option>
+                </select>
+            </div>
+
+            <ul id="contacts_list">
+                <!-- Des éléments de liste devront être ajoutés ici -->
+            </ul>
+
+            <button id="add_button">Ajouter un contact</button>
+            <div id="pagination"></div>
+
+        </div>
+
+    </div>
+
+    <!-- Écran fiche d'un contact -->
+    <div class="screen" id="details_screen">
+
+        <div class="screen_contents">
+
+            <button class="back_button">&times;</button>
+
+            <!-- Les contenus texte des éléments ci-dessous devront être mis à jour -->
+
+            <h2 id="details_name">???</h2>
+
+            <p>Téléphone : <span id="details_phone">???</span></p>
+
+            <p>E-mail : <span id="details_email">???</span></p>
+
+            <!-- NOUVEAU -->
+            <p>
+                <button id="edit_button">Modifier ce contact</button>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+<!--<script src="js/Logic_V1.js"></script>--> <!-- cette version, c'est celle de l'interro que j'ai refaite -->
+<!--<script src="js/Logic_V2.js"></script>--> <!-- cette version contient normalement toutes les demandes de la partie 2 + la V1 -->
+<!--<script src="js/Logic_V3.js"></script>--> <!-- cette version contient la recherche de contacts dynamique + la V2 et la V1-->
+<!--<script src="js/Logic_V4.js"></script>--> <!-- cette version contient la sauvegarde sur le localstorage en json des contacts+ la V3, la V2 et la V1-->
+<!--<script src="js/Logic_V5.js"></script>--> <!-- cette version contient la pagination + la v4, la V3, la V2 et la V1-->
+<script src="js/Logic_V5.js"></script>
+</body>
+
+</html>

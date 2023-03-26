@@ -1,0 +1,54 @@
+Application Liste de contacts
+
+L'exercice consiste à compléter les fonctionnalités d'une application de gestion de liste de contacts, de manière à pouvoir créer une nouvelle fiche contact (nom, prénom, téléphone, email), l'ajouter à une liste et l'afficher.
+
+L'affichage et la mise en page sont déjà gérés dans index.html et style.css (aucun besoin de modification dans ces fichiers). Tout fonctionnera sur une seule page HTML, qui sera capable d'afficher 3 écrans différents (liste, fiche contact, formulaire d'ajout).
+
+L'application reste très simplifiée et ne gèrera pas, dans le cadre de cet exercice, la suppression ou le tri alphabétique des contacts, ni la sauvegarde en BDD.
+
+Il faudra commencer par mettre en place un script JS qui accueillera le code nécessaire.
+
+---
+
+
+1) Pouvoir afficher les différents écrans de l'application
+
+Les 3 écrans sont en fait placés côte-à-côte dans un conteneur global (#all_screens), que l'on pourra faire glisser latéralement, en modifiant sa propriété (de stylisation) left (car l'élément est en position:fixed). Comme le déplacement vers un écran ou un autre est à prévoir à différents moments, il serait judicieux de préparer une fonction.
+
+Cette fonction pourrait permettre d'afficher le n-ième écran, et utiliser pour cela une formule unique, sachant que pour se déplacer par exemple d'un écran vers la droite, on peut déplacer le conteneur de 100% vers la gauche. Il existe en fait une relation, pour le n-ième écran, entre n et le nombre de fois 100% à soustraire à la propriété left du conteneur.
+
+
+2) Déclencher des actions au clic sur les différents boutons
+
+• #add_button : doit afficher le premier écran (formulaire d'ajout)
+
+• #validate_button : doit commencer par vérifier les contenus des différents champs du formulaire (voir point 3). Si ceux-ci sont corrects, créer un nouvel élément dans la liste de contacts (voir point 4), mettre à jour les contenus de la fiche (troisième écran, voir point 5), vider les champs du formulaire, et afficher le troisième écran.
+
+• .back_button (sur écran d'ajout) : doit vider les champs du formulaire et afficher le second écran (la liste).
+
+• .back_button (sur écran fiche) : doit afficher le second écran (la liste).
+
+
+3) Conditions pour que les données saisies dans les champs lors de l'ajout d'un contact soient cohérentes :
+
+• Commencer par vérifier que chaque champ ait bien une valeur (et non une chaîne de caractère vide).
+
+• Pour aller plus loin, on peut s'assurer que le numéro de téléphone et l'adresse e-mail soient au bon format. Le code suivant peut être utilisé (en partant du principe que la_valeur est ce que l'on veut tester) :
+
+la_valeur.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/); // renverra true si la_valeur est une adresse e-mail, false si non
+
+la_valeur.match(/^(?:(?:\+|00)33[\s.-]{0,3}(?:\(0\)[\s.-]{0,3})?|0)[1-9](?:(?:[\s.-]?\d{2}){4}|\d{2}(?:[\s.-]?\d{3}){2})$/); // renverra true si la_valeur est un numéro de téléphone, false si non
+
+• Si toutes les conditions ne sont pas respectées, il ne doit rien se passer au clic du bouton #validate_button
+
+
+4) Création d'un nouvel élément dans la liste de contacts :
+
+Le nouvel élément créé doit être un <li>, contenir le prénom et le nom du contact, et au clic, doit mettre à jour les contenus du troisième écran (voir point 5) puis afficher celui-ci.
+
+
+5) Mise à jour des contenus du troisième écran :
+
+Cette action aura lieu à deux moments : lors de la création d'un contact et lors d'un clic sur l'un des éléments de liste. Il serait judicieux de mettre en place une fonction pour gérer cet aspect.
+
+Les éléments à mettre en place sont ceux dans lesquels on trouve au départ des points d'interrogation : un <h2> qui doit accueillir prénom et nom, et deux <span> devant accueillir le numéro de téléphone et l'adresse e-mail. Chacun de ces éléments est facilement identifiable pour être modifié.

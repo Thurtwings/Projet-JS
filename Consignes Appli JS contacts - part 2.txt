@@ -1,0 +1,105 @@
+Application Liste de contacts - optimisation et fonctionnalités manquantes
+--------------------------------------------------------------------------
+
+Le prototype d'application JavaScript obtenu à l'issue de l'exercice précédent peut être amélioré : pour l'instant, certains raccourcis ont été pris concernant sa logique de fonctionnement, sans se préoccuper de la bonne approche à avoir lorsqu'il s'agit de gérer une liste de contacts (ou, à vrai dire, tout autre type de données).
+
+---
+
+
+• Stocker correctement la liste de contacts
+
+La liste de contacts doit être le coeur de notre application. Le code peut être revu de manière à faire exister cette liste sous forme de données cohérentes ; le reste des fonctionnalités (ajout, affichage, mais aussi modification, tri et suppression) pourra alors se baser sur ces données.
+
+- La liste en elle-même peut se présenter sous la forme d'un tableau. Différentes fonctions de notre application devront intervenir sur ce tableau, il sera donc judicieux de le créer de manière globale.
+
+- Dans ce tableau, un contact peut se présenter sous la forme d'un objet, possédant les propriétés nom, prénom, adresse e-mail et numéro de téléphone. Lors de la validation du formulaire de création de contact, la première chose à faire serait donc de créer l'objet y correspondant, et de l'ajouter au tableau.
+
+(Voir exemple fourni : demo-tableau-objets-1.html)
+
+
+
+• Faire dépendre la liste affichée (écran 2) du tableau de contacts
+
+Jusqu'à présent, on faisait en sorte de ne modifier la liste HTML des contacts qu'à un moment : lors de la validation du formulaire d'ajout. Ce cas de figure continuera à se présenter, mais d'autres choses pourront maintenant occasionner une mise à jour de cet affichage. Le mieux est donc de prévoir une fonction pour gérer cet aspect, que l'on pourra appeler à chaque fois que ce sera nécessaire. Son déroulement pourrait être :
+
+- Vider le contenu de l'élément <ul> en écran 2
+
+- Pour chaque élément du tableau des objets contact, générer dans cet <ul> un élément <li> en utilisant les propriétés (nom et prénom) de l'objet contact concerné
+
+Cette fonction interviendrait logiquement à chaque fois que le tableau des objets contact est modifié, et donc en premier lieu après l'ajout d'un nouveau contact.
+
+
+
+• Faire dépendre une fiche contact affichée (écran 3) d'un des objets contact
+
+Juste après la création d'un nouveau contact et également lorsqu'on clique sur un contact dans la liste de l'écran 2, on est amenés à l'écran 3, qui doit avoir été mis à jour pour afficher les informations du contact correspondant. Il était déjà suggéré de passer par une fonction pour traiter cette mise à jour ; maintenant que l'application fonctionne autour d'objets, on peut envisager que cette fonction accepte comme paramètre un objet contact pour en récupérer les différentes propriétés.
+
+Ainsi, après avoir généré un nouvel objet contact, on peut directement faire appel à cette fonction en lui passant en paramètre l'objet en question, et lors de la génération de l'élément <li> qui lui correspond (fonction de mise à jour de la liste html), on peut établir qu'au clic sur cet élément <li> le même type d'appel est exécuté.
+
+
+
+• Permettre la modification d'un contact existant
+
+
+A) Préparation du formulaire
+
+Le fichier HTML a été légèrement modifié : on y trouve notamment un nouveau bouton "Modifier ce contact" sur la fiche (écran 3). Son identifiant est "edit_button". Le but, pour permettre une modification de contact, est d'utiliser le même formulaire que pour l'ajout (premier écran), mais dans un "mode" alternatif.
+
+Jusqu'à présent, la gestion des clics sur les différents boutons pouvait se faire de manière "fixe" lors du déclenchement du script ; pour celui-ci on peut fonctionner différemment : lors de la mise à jour des informations présentes sur la fiche (écran 3), la réponse au clic sur le bouton "Modifier ce contact" est également mise à jour, pour garder trace de quel objet contact est censé être modifié. Note : lorsqu'on définit une méthode onclick (ou autre événement) pour un élément, cela remplace bien celle qui était éventuellement déjà en place.
+
+Faire en sorte qu'au clic sur ce nouveau bouton :
+
+- Le premier écran (formulaire) soit affiché
+
+- Le formulaire soit pré-rempli avec les informations (propriétés) issues de l'objet contact dont on était en train d'observer la fiche sur l'écran 3. On peut pré-remplir un champ texte en modifiant sa propriété value.
+
+- On passe en "mode édition" pour que, lors du clic sur le bouton de validation du formulaire (modifications à prévoir au point suivant), un fonctionnement alternatif puisse être en place. Ce "mode" peut être géré via une variable globale, à faire basculer entre deux états (représentant "ajout" et "édition") selon le besoin, et à tester au bon moment (voir point suivant).
+
+- Pour une interface cohérente, certains éléments jusqu'à présent "fixes" de l'écran formulaire soient modifiés : le titre peut afficher "Modifier un contact" au lieu de "Ajouter un contact", le bouton de validation peut également afficher autre chose que "Ajouter".
+
+Attention : cette nouvelle logique du formulaire capable de fonctionner de deux manières implique de bien repasser en mode "ajout" (et de rétablir les contenus texte du titre et bouton) lorsque nécessaire, c'est-à-dire lors d'un clic sur le bouton "Ajouter un contact" du premier écran.
+
+
+B) Validation du formulaire en "mode édition"
+
+Lors du clic sur le bouton de validation du formulaire (de préférence après avoir contrôlé le bon format des données saisies), deux scénarios doivent pouvoir se dérouler :
+
+- Si on est en "mode ajout", un nouvel objet contact est créé puis la fiche (écran 3) est mise à jour pour concerner celui-ci (logique normalement déjà en place)
+
+- Si on est en "mode édition", aucun nouvel objet n'est créé, on doit modifier les propriétés de celui ayant servi pour le pré-remplissage du formulaire, et mettre à jour la fiche (écran 3) avec ses informations à jour
+
+- Dans les deux cas on termine par afficher l'écran 3 (liste) et vider les champs du formulaire (logique normalement déjà en place)
+
+Dans le scénario "mode édition", pour garder trace de l'objet contact à modifier, on peut éventuellement utiliser une variable globale, dans laquelle on stocke l'objet concerné lors de la préparation du formulaire (point A ci-dessus).
+
+
+
+• Permettre la suppression d'un contact existant
+
+Autre modification qui a été faite dans le fichier HTML : l'écran formulaire comprend également un nouveau bouton "Supprimer ce contact", d'identifiant "delete_button", invisible par défaut.
+
+On peut commencer par rendre ce bouton visible lorsque nécessaire, c'est à dire lorsque le formulaire s'apprête à être utilisé en "mode édition" (point A plus haut). Le CSS mis à jour prévoit que lorsque ce bouton obtient la classe "visible", il apparaisse. Il peut par ailleurs disparaître à nouveau lorsque le formulaire doit être utilisé en "mode ajout".
+
+Le clic sur ce bouton peut être géré d'une manière proche de celui pour modifier un contact (écran 3) : on doit pouvoir mettre à jour ce qui se passe en réponse à son événement clic, et cela devrait se passer lors de la préparation du mode "édition" du formulaire. Ce qu'il doit occasionner :
+
+- Suppression de l'objet contact concerné dans le tableau (voir exemple fourni : demo-tableau-objets-2.html)
+
+- Mise à jour de la liste HTML (écran 2)
+
+- Vidage des champs du formulaire (écran 1)
+
+- Affichage de l'écran liste HTML (écran 2)
+
+Pour bien faire, il faudrait que tout cela soit soumis à une confirmation de l'utilisateur. On peut utiliser la fonction native confirm() de JavaScript, qui fait apparaître un message dans une boîte de dialogue et attend un clic sur "OK" ou "Annuler" avant de renvoyer true ("OK") ou false ("Annuler"). En se documentant sur cette fonction on s'aperçoit qu'elle peut être utilisée dans le cadre d'un test.
+
+
+
+• Permettre que la liste de contacts soit toujours triée par ordre alphabétique
+
+Avant de mettre à jour la liste HTML (écran 2), on peut faire en sorte de trier le tableau d'objets. Il existe une méthode native pour cela, qu'il faudrait paramétrer correctement pour appliquer les critères de tri suivants :
+
+- Des objets dont la propriété nom diffère doivent être classés par ordre alphabétique de leur propriété nom
+
+- Des objets avec la même propriété nom doivent être classés par ordre alphabétique de leur propriété prénom
+
+(Voir exemple fourni : demo-tableau-objets-3.html)
