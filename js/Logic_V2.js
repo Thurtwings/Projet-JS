@@ -77,7 +77,7 @@
         document.querySelector("#delete_button").classList.add("visible");
         elements.label.textContent = "Modifier un contact";
         showScreen(1);
-    };/* 
+    };
     
     /* Fonctions */
 

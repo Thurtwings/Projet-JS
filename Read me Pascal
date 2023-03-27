@@ -1,0 +1,6 @@
+Salut,
+merci pour le projet, c'était cool. je pense avoir fait tout ce qui était demandé.
+tu verras dans le fichier HTML dans les balises <script> qu'il y à 5 version de code, la 5 étant beaucoup plus avancée,
+mais seulement la 2 correspond a tes demandes de la partie 2.
+Si tu veux checker les autres versions, il te faudra dé-commenter les elements dans l'index.html.
+pour lancer la version que tu veux, tu n'auras qu'à changer le numéro dans index.html (<script src="js/Logic_V2.js"></script>)
